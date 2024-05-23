@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Snap</title>
+    <link rel="icon" href="logo.png" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+      ::selection {
+        background: #090d16;
+        color: #263589;
+      }
+
+      ::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #80868b;
+        border-radius: 20px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        @keyframes fade {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
+        }
+      }
+
+      body {
+        background-color: #161d2d;
+        color: ghostwhite;
+        font-family: "Montserrat", sans-serif;
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      h1 {
+        margin-top: 100px;
+        font-weight: 300;
+        font-size: 50px;
+      }
+
+      .dark {
+        background-color: #161d2d;
+        color: ghostwhite;
+      }
+
+      .light {
+        background-color: #f5f9fc;
+        color: #1c2333;
+      }
+
+      .nav {
+        animation: fade 1s ease-in-out;
+        z-index: 10;
+        width: 100%;
+        height: 80px;
+        background: rgba(255, 255, 255, 0);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        position: fixed;
+        padding-left: 20px;
+        padding-right: 20px;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      .nav a {
+        text-decoration: none;
+        padding: 20px 15px;
+        display: inline-block;
+        margin-top: 10px;
+        margin-right: 10px;
+        transition: color 0.5s;
+      }
+
+      .dark .nav a {
+        color: #f8f8ff;
+      }
+
+      .light .nav a {
+        color: #1c2333;
+      }
+
+      .nav a:hover {
+        color: #6619ad;
+      }
+
+      .nav a:active {
+        text-decoration: none;
+        color: #383c48;
+      }
+
+      .theme-toggle-box {
+        animation: fade 1s ease-in-out;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+      }
+
+      .switch {
+        font-size: 17px;
+        position: relative;
+        display: inline-block;
+        width: 62px;
+        height: 35px;
+      }
+
+      .switch input {
+        opacity: 1;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        background: #ababab;
+        transition: 0.4s;
+        border-radius: 30px;
+        border: 1px solid #ccc;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 1.9em;
+        width: 1.9em;
+        border-radius: 16px;
+        left: 1.2px;
+        top: 0;
+        bottom: 0;
+        background-color: ghostwhite;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #0d6efd;
+        border: 1px solid transparent;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(1.5em);
+      }
+
+      .download-btn {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        background-color: #0d6efd;
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0px;
+        margin-left: 100px;
+        border-radius: 10px;
+        border: 2px solid #0d6efd;
+        box-sizing: border-box;
+        text-decoration: none;
+        font-weight: 500;
+        color: #101010;
+        text-align: center;
+        transition: all 0.5s;
+        font-size: 20px;
+      }
+
+      .download-btn:hover {
+        background-color: #0060f0;
+      }
+
+      .download-btn:active {
+        background-color: #0054d1;
+      }
+
+      .download-btn2 {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        background-color: transparent;
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 20px;
+        border-radius: 10px;
+        border: 2px solid #0d6efd;
+        box-sizing: border-box;
+        text-decoration: none;
+        font-weight: 500;
+        color: #0d6efd;
+        text-align: center;
+        transition: all 0.5s;
+        font-size: 20px;
+      }
+
+      .download-btn2:hover {
+        color: #101010;
+        background-color: #0d6efd;
+      }
+
+      .dark .modal {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        width: 700px;
+        height: 400px;
+        border: 1px solid #383c48;
+        border-radius: 20px;
+        background-color: #1c2333;
+        color: ghostwhite;
+        margin: 100px;
+        transition: all 0.2s;
+      }
+
+      .light .modal {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        width: 700px;
+        height: 400px;
+        border: 1px solid #383c48;
+        border-radius: 20px;
+        background-color: aliceblue;
+        color: #1c2333;
+        margin: 100px;
+        transition: all 0.2s;
+      }
+
+      .modal-header {
+        font-size: 50px;
+        margin-top: 50px;
+        margin-left: 50px;
+      }
+
+      .modal-text {
+        font-size: 28px;
+        margin-top: 20px;
+        margin-left: 50px;
+      }
+
+      .dark footer {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        background-color: #5a5f68;
+        color: ghostwhite;
+        border-radius: 20px;
+        border: 1px solid ghostwhite;
+        padding: 50px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-top: 200px;
+      }
+
+      .light footer {
+        transition: background-color 0.5s, color 0.5s;
+        animation: fade 1s ease-in-out;
+        background-color: ghostwhite;
+        color: #5a5f68;
+        border-radius: 20px;
+        border: 1px solid #1c2333;
+        padding: 50px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-top: 200px;
+      }
+
+      .footer-img {
+        width: 100px;
+        margin: 50px;
+      }
+
+      .code-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .code-box2 {
+        margin-top: 200px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .code-main {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        margin-left: 100px;
+        width: 1000px;
+        height: 520px;
+        border-radius: 16px;
+        border: 1px solid #424a57;
+        background-color: #141c2b;
+        box-shadow: 0px 0px 100px 0px #212d49;
+      }
+
+      .code-top-bar {
+        margin-left: 149px;
+        margin-top: 16px;
+        width: 850px;
+        height: 48px;
+        border-radius: 10px 0px 0px 0px;
+        border: 1px solid #424a57;
+        background-color: #1d2838;
+      }
+
+      .code-bar {
+        margin-left: 0px;
+        margin-top: -1px;
+        width: 149px;
+        height: 1px;
+        background-color: #7dd3fc;
+      }
+
+      .code-txt {
+        font-size: 20px;
+        font-weight: 300;
+        margin-left: 24px;
+        margin-top: -40px;
+        color: #7dd3fc;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .code-text {
+        margin-left: 60px;
+        position: relative;
+        top: 2px;
+      }
+
+      pre {
+        color: #cbd5e1;
+        font-size: 20px;
+        margin-left: 60px;
+        margin-top: 60px;
+        font-family: "Inter", sans-serif;
+        line-height: 30px;
+      }
+
+      .code-white {
+        color: #ffffff;
+      }
+
+      .code-mute {
+        color: #64748b;
+      }
+
+      .code-pink {
+        color: #f472b6;
+      }
+
+      .code-blue {
+        color: #7dd3fc;
+      }
+
+      .code-highlight {
+        background-color: #2e3e61;
+        padding: 2px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+
+  <body class="dark">
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="doc.html">Docs</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <div class="theme-toggle-box">
+      <label class="switch">
+        <input type="checkbox" id="themeToggle" />
+        <span class="slider" id="slider"></span>
+      </label>
+    </div>
+
+    <h1
+      style="
+        animation: fade 1s ease-in-out;
+        font-size: 80px;
+        font-weight: 600;
+        margin-left: 180px;
+        color: #2335c0;
+      "
+    >
+      Snap!
+    </h1>
+
+    <p
+      style="
+        animation: fade 1s ease-in-out;
+        font-weight: 500;
+        font-size: 30px;
+        margin-left: 80px;
+        color: #2335c0;
+      "
+    >
+      Make CSS Easier And Quicker.
+    </p>
+
+    <h2
+      style="
+        font-weight: 300;
+        margin-left: 80px;
+        margin-top: 80px;
+        animation: fade 1s ease-in-out;
+      "
+    >
+      You Can Download the CSS File And Use It In Your Code.<br />And The DOCX
+      File For Documentations.
+    </h2>
+
+    <a class="download-btn" href="Snap.css" download>Download CSS File</a>
+    <a class="download-btn2" href="SNAP.docx" download
+      >Download DOCX File (Documentation)</a
+    >
+
+    <br /><br /><br /><br /><br /><br />
+
+    <h2
+      style="
+        animation: fade 1s ease-in-out;
+        font-size: 80px;
+        font-weight: 600;
+        margin-left: 180px;
+        color: #2335c0;
+      "
+    >
+      Mark.UI
+    </h2>
+    <h2
+      style="
+        font-weight: 300;
+        margin-left: 80px;
+        margin-top: 80px;
+        animation: fade 1s ease-in-out;
+      "
+    >
+      Inspired By TailwindCSS.<br />Frontend Framework For CSS.<br /><br /><br />You Can Use It Just Like A Tailwind CLI,<br />
+      But In Your Own Code. Make Sure To<br />
+      Use The Script Tag To LinkThe "mark.js"<br />File To Your HTML Code.
+      <br /><br />(You Can Use Your Own Custom CSS In Your HTML Code.)
+    </h2>
+    <br /><br />
+    <h2
+      style="
+        font-weight: 300;
+        margin-left: 80px;
+        margin-top: 80px;
+        animation: fade 1s ease-in-out;
+      "
+    >
+      Download The "mark.js" File:
+    </h2>
+    <a style="margin-left: 100px;" class="download-btn2" href="mark.js" download>mark.js</a><br><br><br>
+
+    <div class="code-main">
+      <div class="code-top-bar"></div>
+      <div class="code-bar"></div>
+      <p class="code-txt">
+        index.html
+        <span class="code-text">Code</span>
+      </p>
+      <pre>
+<span class="code-mute">&lt;!</span><span class="code-white">doctype html</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;</span><span class="code-pink">html</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;</span><span class="code-pink">head</span><span class="code-mute">&gt;</span>
+  <span class="code-mute">&lt;</span><span class="code-pink">meta</span> charset<span class="code-mute">="</span><span class="code-blue">UTF-8</span><span class="code-mute">"</span><span class="code-mute">&gt;</span>
+  <span class="code-mute">&lt;</span><span class="code-pink">meta</span> name<span class="code-mute">="</span><span class="code-blue">viewport</span><span class="code-mute">"</span> content<span class="code-mute">="</span><span class="code-blue">width=device-width, initial-scale=1.0</span><span class="code-mute">"</span><span class="code-mute">&gt;</span>
+  <span class="code-mute">&lt;</span><span class="code-pink">title</span><span class="code-mute">&gt;</span>Hello World!<span class="code-mute">&lt;/</span><span class="code-pink">title</span><span class="code-mute">&gt;</span>
+  <span class="code-highlight"><span class="code-mute">&lt;</span><span class="code-pink">script</span> src<span class="code-mute">="</span><span class="code-blue">mark.js</span><span class="code-mute">"</span><span class="code-mute">&gt;</span><span class="code-mute">&lt;/</span><span class="code-pink">script</span><span class="code-mute">&gt;</span></span>
+<span class="code-mute">&lt;/</span><span class="code-pink">head</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;</span><span class="code-pink">body</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;</span><span class="code-pink">h1</span><span class="code-mute">&gt;</span><span class="code-white">Hello World!</span><span class="code-mute">&lt;/</span><span class="code-pink">h1</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;/</span><span class="code-pink">body</span><span class="code-mute">&gt;</span>
+<span class="code-mute">&lt;/</span><span class="code-pink">html</span><span class="code-mute">&gt;</span>
+      </pre>
+    </div>
+  </div>
+
+    <br /><br /><br /><br /><br /><br />
+
+    <div class="modal-box">
+      <div class="modal">
+        <p class="modal-header">What Is 'Snap!'?</p>
+        <p class="modal-text">
+          'Snap!' Is A CSS Framework, just like<br />Bootstrap and Tailwind.
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <img draggable="false" class="footer-img" src="Snap.png" />
+      <p>© 2024, By Eshayat. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const slider = document.getElementById("slider");
+
+      themeToggle.addEventListener("change", () => {
+        if (themeToggle.checked) {
+          document.body.classList.remove("dark");
+          document.body.classList.add("light");
+          slider.classList.remove("slider-blue");
+          slider.classList.add("slider-green");
+        } else {
+          document.body.classList.remove("light");
+          document.body.classList.add("dark");
+          slider.classList.remove("slider-green");
+          slider.classList.add("slider-blue");
+        }
+      });
+    </script>
+  </body>
+</html>
